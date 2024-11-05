@@ -12,11 +12,11 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
 
 1) Clone the repository
    ```bash
-   git clone https://github.com/astein-iamovers/neone-setup.git
+   git clone https://github.com/astein-iamovers/neone.git
    ```
 2) Switch to the directory neone
    ```bash
-   cd neone-setup/neone
+   cd neone
    ```
    If you have Mac or Linux, please reset folder permissions 
    ```bash
