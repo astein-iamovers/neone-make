@@ -1,14 +1,4 @@
 services:
-    ne-one-play:
-        build: 
-            context: .
-            dockerfile: ne-one-play/Dockerfile
-        ports:
-            - "3001:3000"
-        depends_on:
-            ne-one-1:
-                condition: service_healthy
-
     ne-one-view:
         image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one-view:dev
         ports:
@@ -23,14 +13,16 @@ services:
         image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one:dev
         ports:
             - "8080:8080"
+        volumes:
+            - ./rdf_data:/data/rdf_data
         healthcheck:
-            test: curl --fail http://localhost:8080/q/health || exit 1
+            test: curl --fail http://${HOST}:8080/q/health || exit 1
             interval: 5s
             timeout: 5s
             retries: 10            
-        environment:            
-            - REPOSITORY_TYPE=http
-            - HTTP_REPOSITORY_URL=http://graph-db:7200/repositories/neone
+        environment:
+            - REPOSITORY_TYPE=in-memory
+            - REPOSITORY_DATA_DIR=/data/rdf_data
             - LO_ID_CONFIG_HOST=${HOST}
             - LO_ID_CONFIG_PORT=8080
             - LO_ID_CONFIG_SCHEME=http
@@ -55,31 +47,6 @@ services:
             - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
-
-    graph-db:
-        image: ontotext/graphdb:10.4.3
-        ports:
-            - "7200:7200"        
-        healthcheck:
-            test: "curl -f http://localhost:7200/rest/repositories || exit 1"
-            interval: 15s
-            timeout: 10s
-            retries: 20
-
-    graph-db-setup:
-        image: ontotext/graphdb:10.4.3
-        entrypoint: [ "/bin/bash", "-c" ]
-        restart: "no"
-        depends_on:
-            graph-db:
-                condition: service_healthy
-        command:
-            - /opt/neone/graphdb/init.sh
-        environment:
-            - NEONE_REPO_ID=neone
-        volumes:
-            - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
-            - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl" 
 
     mockserver:
         image: mockserver/mockserver:5.15.0
