@@ -54,20 +54,19 @@ IMPORTANT: To simplify the setup, both NE:ONE servers are connected to a single 
 
 ## Postman Collection
 
-To setup a pub/sub we have prepared a Postman collection. You will need to install Postman or a compatible software in order to use it.
+We have prepared a Postman collection to test the ONE Record API. You will need to install Postman or a compatible software in order to use it.
 
 1. [Download the Postman Collection here.](./assets/postman/Subscription.postman_collection.json) It will open a new github page, use the download button to get the file
 
 2. [Download the Postman Environment here](./assets/postman/SubscriptionEnvironment.postman_environment.json). It will open a new github page, use the download button to get the file
 
-3. Import the Environment in Postman
+3. Import the Environment in Postman and Update the Variables
 
 4. Import the Collection in Postman
 
-5. In the Environments tab, select the subscription environment. 
-There you will have server1, server2 and baseUrlKeyCloak
+5. In the Environments tab, select the IAM Test environment. 
 
-6. Select Collections on the right menu and open the Subscription collection already imported
+6. Select Collections on the right menu and open the IAM Test collection already imported
 
 7. Use the Token Request call to generate and access token
 
