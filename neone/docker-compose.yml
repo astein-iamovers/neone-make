@@ -1,0 +1,89 @@
+services:
+    ne-one-play:
+        build: 
+            context: .
+            dockerfile: ne-one-play/Dockerfile
+        ports:
+            - "3001:3000"
+        depends_on:
+            ne-one-1:
+                condition: service_healthy
+
+    ne-one-view:
+        image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one-view:dev
+        ports:
+            - "3000:3000"
+        environment:
+            - NUXT_PUBLIC_API_BASE=http://localhost:8080
+        depends_on:
+            ne-one-1:
+                condition: service_healthy
+
+    ne-one-1:
+        image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one:dev
+        ports:
+            - "8080:8080"
+        healthcheck:
+            test: curl --fail http://localhost:8080/q/health || exit 1
+            interval: 5s
+            timeout: 5s
+            retries: 10            
+        environment:            
+            - REPOSITORY_TYPE=http
+            - HTTP_REPOSITORY_URL=http://graph-db:7200/repositories/neone
+            - LO_ID_CONFIG_HOST=${HOST}
+            - LO_ID_CONFIG_PORT=8080
+            - LO_ID_CONFIG_SCHEME=http
+            - AUTH_VALID_ISSUERS_LOCAL=http://localhost:8989/realms/neone
+            - AUTH_ISSUERS_LOCAL_PUBLICKEY_LOCATION=http://keycloak:8989/realms/neone/protocol/openid-connect/certs
+            - QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL=http://keycloak:8989/realms/neone
+            - QUARKUS_OIDC_CLIENT_CLIENT_ID=neone-client
+            - QUARKUS_OIDC_CLIENT_CREDENTIALS_SECRET=lx7ThS5aYggdsMm42BP3wMrVqKm9WpNY                                                                                                                                                                         
+            - QUARKUS_HTTP_PORT=8080           
+            - QUARKUS_REDIS_HOSTS=redis://localhost:6379
+            - AUTO_ACCEPT_ACTION_REQUESTS=true
+            - BLOBSTORE_CREATE_BUCKET=false
+            - QUARKUS_HTTP_CORS=true
+            - QUARKUS_HTTP_CORS_ORIGINS=/.*/
+            - QUARKUS_HTTP_CORS_EXPOSED_HEADERS=location,revision,latest-revision,type
+            - QUARKUS_REST_CLIENT_SUBSCRIPTION_CLIENT_URL=${NOTIFICATION_ENDPOINT}
+            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=${NOTIFICATION_ENDPOINT}
+            - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
+            - FORWARD_NOTIFICATIONS=true
+            - QUARKUS_LOG_MIN_LEVEL=DEBUG
+
+    graph-db:
+        image: ontotext/graphdb:10.4.3
+        ports:
+            - "7200:7200"        
+        healthcheck:
+            test: "curl -f http://localhost:7200/rest/repositories || exit 1"
+            interval: 15s
+            timeout: 10s
+            retries: 20
+
+    graph-db-setup:
+        image: ontotext/graphdb:10.4.3
+        entrypoint: [ "/bin/bash", "-c" ]
+        restart: "no"
+        depends_on:
+            graph-db:
+                condition: service_healthy
+        command:
+            - /opt/neone/graphdb/init.sh
+        environment:
+            - NEONE_REPO_ID=neone
+        volumes:
+            - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
+            - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl" 
+
+    mockserver:
+        image: mockserver/mockserver:5.15.0
+        ports:
+          - "1080:1080"
+        volumes:
+          - "./mockserver/mockserver.properties:/config/mockserver.properties"
+          - "./mockserver/:/mockserver/"
+        environment:
+          - MOCKSERVER_PROPERTY_FILE=/config/mockserver.properties
+          - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/*.json
