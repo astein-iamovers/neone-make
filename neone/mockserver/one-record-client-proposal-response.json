@@ -19,7 +19,7 @@
           },
           "api:hasContentType": " application/ld+json ",
           "api:hasSubscriber": {
-           "@id": "http://localhost:8080/"
+           "@id": "http://{HOST}:8080/"
           },
           "api:hasTopicType": {
             "@id": "api:LOGISTICS_OBJECT_TYPE"
@@ -50,13 +50,13 @@
           },
           "api:hasContentType": " application/ld+json ",
           "api:hasSubscriber": {
-            "@id": "http://localhost:8080/"
+            "@id": "http://{HOST}:8080/"
           },
           "api:hasTopicType": {
             "@id": "api:LOGISTICS_OBJECT_IDENTIFIER"
           },
           "api:hasTopic": {
-            "@id": "http://localhost:8080/4711"
+            "@id": "http://{HOST}:8080/4711"
           },
           "api:subscribeToLogisticsEvents": true,
           "api:sendLogisticsObjectBody": true
