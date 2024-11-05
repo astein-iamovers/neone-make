@@ -35,22 +35,18 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
     ✔ Container docker-compose-ne-one-server-1  Started 0.0s 
     ✔ Container docker-compose-graph-db-setup-1 Started 0.0s
    ```
-6) Try to access the ONE Record Server by  http://localhost:8080 or http://localhost:8081 using your favorite browser. 
+6) Try to access the ONE Record Server by  http://{baseUrl}:8080 using your favorite browser. 
    You should see a HTTP Error 401, because you did not authenticate yet. But this confirms that the ONE Record Server is up and running.
 
 # Overview of services
 
 | Name | Description | Base URL / Admin UI |
 |-|-|-|
-| ne-one-1 | [ne-one server](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one) | http://localhost:8080 |
-| ne-one-2 | [ne-one server](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one) | http://localhost:8081 |
-| ne-one view | [ne-one view](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one-view) | http://localhost:3000 |
-| ne-one play | [ne-one play](https://github.com/aloccid-iata/neoneplay) | http://localhost:3001 |
-| graphdb | GraphDB database as database backend for ne-one-1 and ne-one-2 on two separate repositories (neone and neone2) | http://localhost:7200 |
-| keycloak | Identity provider for ne-one-1 and ne-one-2 servers to authenticate ONE Record clients and to obtain tokens for outgoing requests. <br/> **Preconfigured client_id:** neone-client<br/> **Preconfigured client_secret:** lx7ThS5aYggdsMm42BP3wMrVqKm9WpNY  | http://localhost:8989 <br/> (username/password: admin/admin)|
-| mockserver | A mock server that displays all notification, subscription and action request and replies with specific patterns | http://localhost:1080/mockserver/dashboard |
-
-IMPORTANT: To simplify the setup, both NE:ONE servers are connected to a single Keycloak server, sharing the same user account.
+| ne-one-1 | [ne-one server](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one) | http://{baseUrl}:8080 |
+| ne-one view | [ne-one view](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one-view) | http://{baseUrl}:3000 |
+| ne-one play | [ne-one play](https://github.com/aloccid-iata/neoneplay) | http://{baseUrl}:3001 |
+| graphdb | GraphDB database as database backend for ne-one-1 repository neone | http://{baseUrl}:7200 |
+| mockserver | A mock server that displays all notification, subscription and action request and replies with specific patterns | http://{baseUrl}:1080/mockserver/dashboard |
 
 ## Postman Collection
 
@@ -82,7 +78,7 @@ IMPORTANT: In the current setup, *ne-one-1* will receive a notification and send
 
 ## Add NE:ONE server into NE:ONE Play
 
-1. Connect to NE:ONE Play http://localhost:3001 
+1. Connect to NE:ONE Play http://{baseUrl}:3001 
 
 2. Click on the setting button in the top-right corner (cog icon)
 
@@ -90,17 +86,9 @@ IMPORTANT: In the current setup, *ne-one-1* will receive a notification and send
 
     - Organization Name: <Choose a name (any string is accepted)>
     - Protocol: http
-    - Host: http://localhost:8080  
+    - Host: http://{baseUrl}:8080  
     - Token : <Use the postman collection to generate a token and copy it here (follow the previous paragraph)>
     - Color : pick up a random color
 
-4. Add your ne-one-1 server following this instruction:
-
-    - Organization Name: <Choose a name (any string is accepted)>
-    - Protocol: http
-    - Host: http://localhost:8081  
-    - Token : <Use the postman collection to generate a token and copy it here (follow the previous paragraph)>
-    - Color : pick up a random color
-
-5. Now you can start using NE:ONE Play. 
+4. Now you can start using NE:ONE Play. 
 
