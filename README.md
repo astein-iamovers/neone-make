@@ -1,6 +1,6 @@
-# ONE Record Two Nodes
+# NEONE Server Setup
 
-Welcome to the ONE Record Two Nodes, in this document you will find all the instructions to run a two NE:ONE server and how to setup pub/sub in ONE Record
+Welcome to the NEONE Server Setup, in this document you will find all the instructions to run a NE:ONE server and how to setup pub/sub in ONE Record
 
 ## Prerequisites
 
@@ -12,11 +12,11 @@ Welcome to the ONE Record Two Nodes, in this document you will find all the inst
 
 1) Clone the repository
    ```bash
-   git clone https://github.com/IATA-Cargo/one-record-two-nodes.git
+   git clone https://github.com/astein-iamovers/neone-setup.git
    ```
-2) Switch to the directory to docker-compose
+2) Switch to the directory neone
    ```bash
-   cd one-record-two-nodes/docker-compose
+   cd neone-setup/neone
    ```
    If you have Mac or Linux, please reset folder permissions 
    ```bash
