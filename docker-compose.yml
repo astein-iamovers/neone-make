@@ -14,7 +14,7 @@ services:
         ports:
             - "3000:3000"
         environment:
-            - NUXT_PUBLIC_API_BASE=http://${HOST}:8080
+            - NUXT_PUBLIC_API_BASE=http://localhost:8080
         depends_on:
             ne-one-server:
                 condition: service_healthy
@@ -24,7 +24,7 @@ services:
         ports:
             - "8080:8080"
         healthcheck:
-            test: curl --fail http://${HOST}:8080/q/health || exit 1
+            test: curl --fail http://localhost:8080/q/health || exit 1
             interval: 5s
             timeout: 5s
             retries: 10
@@ -56,6 +56,12 @@ services:
             - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
+        
+        depends_on:
+            graph-db:
+                condition: service_healthy
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
 
     notification-forwarder:
         build:
@@ -86,7 +92,7 @@ services:
             graph-db:
                 condition: service_healthy
         command:
-            - "chmod +x /opt/neone/graphdb/init.sh && /opt/neone/graphdb/init.sh"
+            - "/opt/neone/graphdb/init.sh"
         environment:
             - NEONE_REPO_ID=neone
         volumes:
