@@ -56,7 +56,7 @@ services:
             - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
-        
+
         depends_on:
             graph-db:
                 condition: service_healthy
