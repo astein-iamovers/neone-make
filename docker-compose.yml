@@ -4,7 +4,7 @@ services:
         ports:
             - "3000:3000"
         environment:
-            - NUXT_PUBLIC_API_BASE=http://localhost:8080
+            - NUXT_PUBLIC_API_BASE=http://${HOST}:8080
         depends_on:
             ne-one-server:
                 condition: service_healthy
