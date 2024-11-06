@@ -31,24 +31,35 @@ def handle_notification():
         logging.error("Invalid JSON received: %s", request.data)
         return jsonify({'error': 'Invalid JSON payload.'}), 400
 
-    # Save the notification to a file
+    # Print and save the notification
+    print("Received Notification:", json.dumps(notification, indent=2))
     notification_filename = save_notification(notification)
 
-    # Process the notification
+    # Extract and show hasEventType
     notification_object = next((item for item in notification.get('@graph', []) if item.get('@type') == "Notification"), None)
 
-    if notification_object and notification_object.get('hasEventType', {}).get('@id') == "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
-        logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
+    if notification_object:
+        event_type = notification_object.get('hasEventType', {}).get('@id')
+        print("Event Type:", event_type)  # Print the hasEventType for visibility
 
+        # Check if event type matches 'LOGISTICS_EVENT_RECEIVED'
+        if event_type != "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
+            logging.info("Event type is not 'LOGISTICS_EVENT_RECEIVED'. Process ended.")
+            return jsonify({'status': 'Event type does not match, process ended.'}), 200
+
+        # Proceed with fetching the logistics object ID if the type matches
+        logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
         if logistics_object_id:
             event = fetch_latest_event(logistics_object_id)
             if event:
-                event_filename = save_event(event)  # Save the event to a file
+                # Print and save the event
+                print("Fetched Event:", json.dumps(event, indent=2))
+                event_filename = save_event(event)
                 forward_event_to_airtable(event)
         else:
             logging.error("Logistics Object ID missing in the notification.")
     else:
-        logging.warning("Notification type does not match 'LOGISTICS_EVENT_RECEIVED'.")
+        logging.warning("Notification object not found in the @graph.")
 
     # Respond with success status after processing and saving
     return jsonify({'status': 'notification processed', 'notification_file': notification_filename}), 200
