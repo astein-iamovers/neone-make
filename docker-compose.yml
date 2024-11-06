@@ -1,4 +1,14 @@
 services:
+    ne-one-play:
+        build:
+            context: .ne-one-play
+            dockerfile: Dockerfile
+        ports:
+            - "3001:3000"
+        depends_on:
+            ne-one-server:
+                condition: service_healthy
+
     ne-one-view:
         image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one-view:dev
         ports:
@@ -19,7 +29,7 @@ services:
             test: curl --fail http://${HOST}:8080/q/health || exit 1
             interval: 5s
             timeout: 5s
-            retries: 10            
+            retries: 10
         environment:
             - REPOSITORY_TYPE=in-memory
             - REPOSITORY_DATA_DIR=/data/rdf_data
@@ -32,7 +42,7 @@ services:
             - QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL=${AUTH_SERVER}
             - QUARKUS_OIDC_CLIENT_CLIENT_ID=${CLIENT_ID}
             - QUARKUS_OIDC_CLIENT_CREDENTIALS_SECRET=${CLIENT_SECRET}
-            - QUARKUS_HTTP_PORT=8080           
+            - QUARKUS_HTTP_PORT=8080
             - QUARKUS_REDIS_HOSTS=redis://localhost:6379
             - ACTION_REQUEST_EVALUATION_INTERVAL=10s
             - AUTO_ACCEPT_ACTION_REQUESTS=true
@@ -47,14 +57,14 @@ services:
             - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
- 
+
     notification-forwarder:
         build:
-          context: ./notification-forwarder  # Path to the folder containing Dockerfile and Flask app
-          dockerfile: Dockerfile  # Specify the Dockerfile for building the Flask app image
+            context: ./notification-forwarder
+            dockerfile: Dockerfile
         ports:
-          - "5000:5000"  # Map host port 5000 to container port 5000 for external access
-        env_file: .env  # Load environment variables from the .env file
+            - "5000:5000"
+        env_file: .env
         volumes:
-          - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
-          - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
+            - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
+            - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
