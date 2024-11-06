@@ -32,7 +32,7 @@ def handle_notification():
         return jsonify({'error': 'Invalid JSON payload.'}), 400
 
     # Print and save the notification
-    print("Received Notification:", json.dumps(notification, indent=2))
+    logging.info("Received Notification: %s", json.dumps(notification, indent=2))
     notification_filename = save_notification(notification)
 
     # Extract and show hasEventType
@@ -40,12 +40,11 @@ def handle_notification():
 
     if notification_object:
         event_type = notification_object.get('hasEventType', {}).get('@id')
-        print("Event Type:", event_type)  # Print the hasEventType for visibility
+        logging.info("Event Type: %s", event_type)  # Log the hasEventType for visibility
 
         # Check if event type matches 'LOGISTICS_EVENT_RECEIVED'
         if event_type != "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
-            logging.info("Event type is not 'LOGISTICS_EVENT_RECEIVED'. Process ended.")
-            return jsonify({'status': 'Event type does not match, process ended.'}), 200
+            return jsonify({'status': 'Not a Logistics Event, process ended.'}), 200
 
         # Proceed with fetching the logistics object ID if the type matches
         logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
@@ -53,7 +52,7 @@ def handle_notification():
             event = fetch_latest_event(logistics_object_id)
             if event:
                 # Print and save the event
-                print("Fetched Event:", json.dumps(event, indent=2))
+                logging.info("Fetched Event: %s", json.dumps(event, indent=2))
                 event_filename = save_event(event)
                 forward_event_to_airtable(event)
         else:
