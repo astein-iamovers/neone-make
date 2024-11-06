@@ -47,9 +47,7 @@ def handle_notification():
         # Check if event type matches 'LOGISTICS_EVENT_RECEIVED'
         if event_type != "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
             logging.info("Not a Logistics Event. Process ended.")  # Additional logging for confirmation
-            response = jsonify({'status': 'Not a Logistics Event, process ended.'})
-            logging.info("Response sent: %s", response.get_json())  # Log response explicitly
-            return response, 200
+            return jsonify({'status': 'Not a Logistics Event, process ended.'}), 200
 
         # Proceed with fetching the logistics object ID if the type matches
         logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
@@ -65,19 +63,7 @@ def handle_notification():
     else:
         logging.warning("Notification object not found in the @graph.")
 
-    # Final response with explicit logging
-    response = jsonify({'status': 'notification processed', 'notification_file': notification_filename})
-    logging.info("Final response sent: %s", response.get_json())  # Log final response explicitly
-    return response, 200
-
-def save_notification(notification):
-    """Save the notification JSON to a file."""
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f"notifications/notification_{timestamp}_{uuid.uuid4().hex}.json"
-    with open(filename, 'w') as file:
-        json.dump(notification, file, indent=2)
-    logging.info("Notification saved to %s", filename)
-    return filename
+    return jsonify({'status': 'notification processed', 'notification_file': notification_filename}), 200
 
 def fetch_latest_event(logistics_object_id):
     url = f"{logistics_object_id}/logistics-events/"
@@ -98,7 +84,16 @@ def fetch_latest_event(logistics_object_id):
         logging.error("Failed to fetch events: %s", response.text)
 
     return None
-
+    
+def save_notification(notification):
+    """Save the notification JSON to a file."""
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = f"notifications/notification_{timestamp}_{uuid.uuid4().hex}.json"
+    with open(filename, 'w') as file:
+        json.dump(notification, file, indent=2)
+    logging.info("Notification saved to %s", filename)
+    return filename
+    
 def save_event(event):
     """Save the event JSON to a file."""
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
