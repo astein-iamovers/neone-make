@@ -46,7 +46,10 @@ def handle_notification():
 
         # Check if event type matches 'LOGISTICS_EVENT_RECEIVED'
         if event_type != "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
-            return jsonify({'status': 'Not a Logistics Event, process ended.'}), 200
+            logging.info("Not a Logistics Event. Process ended.")  # Additional logging for confirmation
+            response = jsonify({'status': 'Not a Logistics Event, process ended.'})
+            logging.info("Response sent: %s", response.get_json())  # Log response explicitly
+            return response, 200
 
         # Proceed with fetching the logistics object ID if the type matches
         logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
@@ -62,8 +65,10 @@ def handle_notification():
     else:
         logging.warning("Notification object not found in the @graph.")
 
-    # Respond with success status after processing and saving
-    return jsonify({'status': 'notification processed', 'notification_file': notification_filename}), 200
+    # Final response with explicit logging
+    response = jsonify({'status': 'notification processed', 'notification_file': notification_filename})
+    logging.info("Final response sent: %s", response.get_json())  # Log final response explicitly
+    return response, 200
 
 def save_notification(notification):
     """Save the notification JSON to a file."""
