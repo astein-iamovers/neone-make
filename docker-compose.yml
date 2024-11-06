@@ -48,13 +48,13 @@ services:
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
  
-  notification-forwarder:
-    build:
-      context: .  # Use the current directory as the build context for the Flask app
-      dockerfile: Dockerfile  # Specify the Dockerfile for building the Flask app image
-    ports:
-      - "5000:5000"  # Map host port 5000 to container port 5000 for external access
-    env_file: .env  # Load environment variables from the .env file
-    volumes:
-      - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
-      - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
+    notification-forwarder:
+        build:
+          context: ./notification-forwarder  # Path to the folder containing Dockerfile and Flask app
+          dockerfile: Dockerfile  # Specify the Dockerfile for building the Flask app image
+        ports:
+          - "5000:5000"  # Map host port 5000 to container port 5000 for external access
+        env_file: .env  # Load environment variables from the .env file
+        volumes:
+          - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
+          - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
