@@ -12,8 +12,10 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Retrieve Airtable webhook URL and JWT token from environment variables
+# Retrieve Airtable webhook URL from environment variables
 AIRTABLE_WEBHOOK_URL = os.getenv("AIRTABLE_WEBHOOK_URL")
+
+# Retrieve JWT token from environment variables to fetch Events
 JWT_TOKEN = os.getenv("JWT_TOKEN")
 
 # Set up logging
