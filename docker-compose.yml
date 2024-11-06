@@ -69,3 +69,28 @@ services:
         volumes:
             - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
             - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
+
+    graph-db:
+        image: ontotext/graphdb:10.4.3
+        ports:
+            - "7200:7200"
+        healthcheck:
+            test: "curl -f http://localhost:7200/rest/repositories || exit 1"
+            interval: 15s
+            timeout: 10s
+            retries: 20
+
+    graph-db-setup:
+        image: ontotext/graphdb:10.4.3
+        entrypoint: [ "/bin/bash", "-c" ]
+        restart: "no"
+        depends_on:
+            graph-db:
+                condition: service_healthy
+        command:
+            - "chmod +x /opt/neone/graphdb/init.sh && /opt/neone/graphdb/init.sh"
+        environment:
+            - NEONE_REPO_ID=neone
+        volumes:
+            - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
+            - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl"
