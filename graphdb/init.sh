@@ -14,6 +14,11 @@ else
     exit 1
 fi
 
+# Set the repository as active after creating it
+curl -X PUT --header 'Content-Type: text/plain' \
+     --data "$NEONE_REPO_ID" \
+     http://graph-db:7200/rest/activeRepository
+
 # Uncomment and edit the following lines to create a second repository if needed
 
 #if [ "$NEONE_REPO2_HTTP_STATUS" -eq 404 ]; then
