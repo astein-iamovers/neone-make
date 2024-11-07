@@ -31,7 +31,8 @@ def handle_notification():
         logging.error("Invalid JSON received: %s", request.data)
         return jsonify({'error': 'Invalid JSON payload.'}), 400
 
-    # Save the notification to a file
+    # Log and save the entire notification JSON
+    logging.info("Received Notification: %s", json.dumps(notification, indent=2))
     notification_filename = save_notification(notification)
 
     # Process the notification
@@ -43,14 +44,15 @@ def handle_notification():
         if logistics_object_id:
             event = fetch_latest_event(logistics_object_id)
             if event:
-                event_filename = save_event(event)  # Save the event to a file
+                # Log and save the entire event JSON
+                logging.info("Fetched Event: %s", json.dumps(event, indent=2))
+                event_filename = save_event(event)
                 forward_event_to_airtable(event)
         else:
             logging.error("Logistics Object ID missing in the notification.")
     else:
         logging.warning("Notification type does not match 'LOGISTICS_EVENT_RECEIVED'.")
 
-    # Respond with success status after processing and saving
     return jsonify({'status': 'notification processed', 'notification_file': notification_filename}), 200
 
 def save_notification(notification):
