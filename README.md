@@ -37,7 +37,7 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
    [+] Running 6/6
     ✔ Network docker-compose_default            Created
     ✔ Container docker-compose-graph-db-1       Healthy
-    ✔ Container neone-notification-forwarder-1  Started
+    ✔ Container neone-notification-handler-1  Started
     ✔ Container docker-compose-graph-db-setup-1 Started
     ✔ Container docker-compose-ne-one-server-1  Healty
     ✔ Container neone-ne-one-play-1             Started
