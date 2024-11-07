@@ -12,10 +12,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Retrieve Airtable webhook URL from environment variables
+# Retrieve Airtable webhook URL and JWT token from environment variables
 AIRTABLE_WEBHOOK_URL = os.getenv("AIRTABLE_WEBHOOK_URL")
-
-# Retrieve JWT token from environment variables to fetch Events
 JWT_TOKEN = os.getenv("JWT_TOKEN")
 
 # Set up logging
@@ -33,37 +31,36 @@ def handle_notification():
         logging.error("Invalid JSON received: %s", request.data)
         return jsonify({'error': 'Invalid JSON payload.'}), 400
 
-    # Print and save the notification
-    logging.info("Received Notification: %s", json.dumps(notification, indent=2))
+    # Save the notification to a file
     notification_filename = save_notification(notification)
 
-    # Extract and show hasEventType
+    # Process the notification
     notification_object = next((item for item in notification.get('@graph', []) if item.get('@type') == "Notification"), None)
 
-    if notification_object:
-        event_type = notification_object.get('hasEventType', {}).get('@id')
-        logging.info("Event Type: %s", event_type)  # Log the hasEventType for visibility
-
-        # Check if event type matches 'LOGISTICS_EVENT_RECEIVED'
-        if event_type != "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
-            logging.info("Not a Logistics Event. Process ended.")  # Additional logging for confirmation
-            return jsonify({'status': 'Not a Logistics Event, process ended.'}), 200
-
-        # Proceed with fetching the logistics object ID if the type matches
+    if notification_object and notification_object.get('hasEventType', {}).get('@id') == "https://onerecord.iata.org/ns/api#LOGISTICS_EVENT_RECEIVED":
         logistics_object_id = notification_object.get('hasLogisticsObject', {}).get('@id')
+
         if logistics_object_id:
             event = fetch_latest_event(logistics_object_id)
             if event:
-                # Print and save the event
-                logging.info("Fetched Event: %s", json.dumps(event, indent=2))
-                event_filename = save_event(event)
+                event_filename = save_event(event)  # Save the event to a file
                 forward_event_to_airtable(event)
         else:
             logging.error("Logistics Object ID missing in the notification.")
     else:
-        logging.warning("Notification object not found in the @graph.")
+        logging.warning("Notification type does not match 'LOGISTICS_EVENT_RECEIVED'.")
 
+    # Respond with success status after processing and saving
     return jsonify({'status': 'notification processed', 'notification_file': notification_filename}), 200
+
+def save_notification(notification):
+    """Save the notification JSON to a file."""
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = f"notifications/notification_{timestamp}_{uuid.uuid4().hex}.json"
+    with open(filename, 'w') as file:
+        json.dump(notification, file, indent=2)
+    logging.info("Notification saved to %s", filename)
+    return filename
 
 def fetch_latest_event(logistics_object_id):
     url = f"{logistics_object_id}/logistics-events/"
@@ -84,16 +81,7 @@ def fetch_latest_event(logistics_object_id):
         logging.error("Failed to fetch events: %s", response.text)
 
     return None
-    
-def save_notification(notification):
-    """Save the notification JSON to a file."""
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f"notifications/notification_{timestamp}_{uuid.uuid4().hex}.json"
-    with open(filename, 'w') as file:
-        json.dump(notification, file, indent=2)
-    logging.info("Notification saved to %s", filename)
-    return filename
-    
+
 def save_event(event):
     """Save the event JSON to a file."""
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
