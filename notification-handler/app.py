@@ -47,7 +47,7 @@ def handle_notification():
                 # Log and save the entire event JSON
                 logging.info("Fetched Event: %s", json.dumps(event, indent=2))
                 event_filename = save_event(event)
-                forward_event_to_airtable(event)
+                forward_event_to_make(event)
         else:
             logging.error("Logistics Object ID missing in the notification.")
     else:
