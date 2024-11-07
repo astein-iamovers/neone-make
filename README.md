@@ -22,20 +22,26 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
    ```bash
    chmod -R 755 ./
    ```
-4) Start all services with [docker compose](https://docs.docker.com/compose/)
+4) Modify your .env file adding your variables
+
+5) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
    docker compose up -d
    ```
-5) Wait until all containers are up and running:
+6) Wait until all containers are up and running:
    ```bash
    [+] Running 6/6
-    ✔ Network docker-compose_default            Created 0.0s 
-    ✔ Container docker-compose-graph-db-1       Healthy 0.0s 
-    ✔ Container docker-compose-keycloak-1       Healthy 0.0s 
-    ✔ Container docker-compose-ne-one-server-1  Started 0.0s 
-    ✔ Container docker-compose-graph-db-setup-1 Started 0.0s
+    ✔ Network docker-compose_default            Created
+    ✔ Container docker-compose-graph-db-1       Healthy
+    ✔ Container neone-notification-forwarder-1  Started
+    ✔ Container docker-compose-graph-db-setup-1 Started
+    ✔ Container docker-compose-ne-one-server-1  Healty
+    ✔ Container neone-ne-one-play-1             Started
+    ✔ Container neone-ne-one-view-1             Started
+        
+    
    ```
-6) Try to access the ONE Record Server by  http://{baseUrl}:8080 using your favorite browser. 
+7) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
    You should see a HTTP Error 401, because you did not authenticate yet. But this confirms that the ONE Record Server is up and running.
 
 # Overview of services
@@ -46,7 +52,7 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
 | ne-one view | [ne-one view](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one-view) | http://{baseUrl}:3000 |
 | ne-one play | [ne-one play](https://github.com/aloccid-iata/neoneplay) | http://{baseUrl}:3001 |
 | graphdb | GraphDB database as database backend for ne-one-1 repository neone | http://{baseUrl}:7200 |
-| mockserver | A mock server that displays all notification, subscription and action request and replies with specific patterns | http://{baseUrl}:1080/mockserver/dashboard |
+| notification-forwarder | A Flask app (python) that processes incoming notifications | http://{baseUrl}:5000 |
 
 ## Postman Collection
 
