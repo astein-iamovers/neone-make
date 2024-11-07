@@ -22,11 +22,11 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
    ```bash
    chmod -R 755 ./
    ```
-4) Modify your .env file adding your variables
+4) Modify your .env file with the nano editor.
    ```bash
-   nano .env #Open editor
+   nano .env
    ```
-   Paste your variables
+   Paste your variables: baseUrl, client_id, client_secret, audience, notification-endpoint
    To save an exit: ctrl+x then Y then Enter
 6) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
