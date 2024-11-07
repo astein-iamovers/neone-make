@@ -52,11 +52,11 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
 
 | Name | Description | Base URL / Admin UI |
 |-|-|-|
-| ne-one-1 | [ne-one server](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one) | http://{baseUrl}:8080 |
-| ne-one view | [ne-one view](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one-view) | http://{baseUrl}:3000 |
-| ne-one play | [ne-one play](https://github.com/aloccid-iata/neoneplay) | http://{baseUrl}:3001 |
+| ne-one-server | [ne-one server](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one) | http://{baseUrl}:8080 |
+| ne-one-view | [ne-one view](https://git.openlogisticsfoundation.org/wg-digitalaircargo/ne-one-view) | http://{baseUrl}:3000 |
+| ne-one-play | [ne-one play](https://github.com/aloccid-iata/neoneplay) | http://{baseUrl}:3001 |
 | graphdb | GraphDB database as database backend for ne-one-1 repository neone | http://{baseUrl}:7200 |
-| notification-forwarder | A Flask app (python) that processes incoming notifications | http://{baseUrl}:5000 |
+| notification-handler | A Flask app (python) that processes incoming notifications | http://{baseUrl}:5000 |
 
 ## Postman Collection
 
