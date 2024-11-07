@@ -51,9 +51,9 @@ services:
             - QUARKUS_HTTP_CORS_EXPOSED_HEADERS=location,revision,latest-revision,type
             - FORWARD_NOTIFICATIONS=true
             - NOTIFICATION_SEND_INTERVAL=10s
-            - QUARKUS_REST_CLIENT_SUBSCRIPTION_CLIENT_URL=${notification-endpoint}
-            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=${notification-endpoint}
-            - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${notification-endpoint}
+            - QUARKUS_REST_CLIENT_SUBSCRIPTION_CLIENT_URL=${notification_endpoint}
+            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=${notification_endpoint}
+            - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${notification_endpoint}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${audience}
 
