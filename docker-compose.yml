@@ -63,9 +63,9 @@ services:
         extra_hosts:
             - "host.docker.internal:host-gateway"
 
-    notification-forwarder:
+    notification-handler:
         build:
-            context: ./flask
+            context: ./notification-handler
             dockerfile: Dockerfile
         ports:
             - "5000:5000"
