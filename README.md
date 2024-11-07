@@ -23,12 +23,16 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
    chmod -R 755 ./
    ```
 4) Modify your .env file adding your variables
-
-5) Start all services with [docker compose](https://docs.docker.com/compose/)
+   ```bash
+   nano .env #Open editor
+   ```
+   Paste your variables
+   To save an exit: ctrl+x then Y then Enter
+6) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
    docker compose up -d
    ```
-6) Wait until all containers are up and running:
+7) Wait until all containers are up and running:
    ```bash
    [+] Running 6/6
     ✔ Network docker-compose_default            Created
@@ -41,7 +45,7 @@ Welcome to the NEONE Server Setup, in this document you will find all the instru
         
     
    ```
-7) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
+8) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
    You should see a HTTP Error 401, because you did not authenticate yet. But this confirms that the ONE Record Server is up and running.
 
 # Overview of services
