@@ -13,7 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Retrieve Airtable webhook URL and JWT token from environment variables
-AIRTABLE_WEBHOOK_URL = os.getenv("AIRTABLE_WEBHOOK_URL")
+MAKE_WEBHOOK_URL = os.getenv("MAKE_WEBHOOK_URL")
 JWT_TOKEN = os.getenv("JWT_TOKEN")
 
 # Set up logging
@@ -93,7 +93,7 @@ def save_event(event):
     logging.info("Event saved to %s", filename)
     return filename
 
-def forward_event_to_airtable(event):
+def forward_event_to_make(event):
     payload = {
         'id': event.get('@id'),
         'logistics_object_id': event.get('eventFor', {}).get('@id'),
@@ -104,11 +104,11 @@ def forward_event_to_airtable(event):
         'recording_organization': event.get('recordingOrganization', {}).get('@id')
     }
 
-    response = requests.post(AIRTABLE_WEBHOOK_URL, json=payload)
+    response = requests.post(MAKE_WEBHOOK_URL, json=payload)
     if response.status_code == 200:
-        logging.info("Event forwarded to Airtable successfully.")
+        logging.info("Event forwarded to Make successfully.")
     else:
-        logging.error("Failed to forward event to Airtable: %s", response.text)
+        logging.error("Failed to forward event to Make: %s", response.text)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
