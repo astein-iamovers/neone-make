@@ -13,10 +13,10 @@ load_dotenv()
 app = Flask(__name__)
 
 # Retrieve Airtable webhook URL from environment variables
-AIRTABLE_WEBHOOK_URL = os.getenv("AIRTABLE_WEBHOOK_URL")
+airtable_webhook = os.getenv("airtable_webhook")
 
 # Retrieve JWT token from environment variables to fetch Events
-JWT_TOKEN = os.getenv("JWT_TOKEN")
+jwt_token = os.getenv("jwt_token")
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -68,7 +68,7 @@ def handle_notification():
 def fetch_latest_event(logistics_object_id):
     url = f"{logistics_object_id}/logistics-events/"
     headers = {
-        'Authorization': f'Bearer {JWT_TOKEN}',
+        'Authorization': f'Bearer {jwt_token}',
         'Content-Type': 'application/ld+json; version=2.0.0-dev'
     }
 
@@ -114,7 +114,7 @@ def forward_event_to_airtable(event):
         'recording_organization': event.get('recordingOrganization', {}).get('@id')
     }
 
-    response = requests.post(AIRTABLE_WEBHOOK_URL, json=payload)
+    response = requests.post(airtable_webhook, json=payload)
     if response.status_code == 200:
         logging.info("Event forwarded to Airtable successfully.")
     else:
