@@ -5,11 +5,9 @@ log {   # Enable logging for debugging
     level DEBUG
 }
 
-# Rewrite all requests to the specified path
-rewrite * /1bqvyj6kfq25sec6rahbjhxbazlohu76
-
-# Reverse proxy to the external Make.com webhook URL
-reverse_proxy https://hook.eu2.make.com {
-    header_up Host {upstream_hostport}
+# Directly proxy all requests to the Make webhook URL from the environment variable
+reverse_proxy {env.MAKE_WEBHOOK_URL} {
+    header_up Host {http.reverse_proxy.upstream.hostport}
+    header_up X-Forwarded-For {remote}
     method POST
 }
