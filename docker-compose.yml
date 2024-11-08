@@ -51,9 +51,7 @@ services:
             - QUARKUS_HTTP_CORS_EXPOSED_HEADERS=location,revision,latest-revision,type
             - FORWARD_NOTIFICATIONS=true
             - NOTIFICATION_SEND_INTERVAL=10s
-            - QUARKUS_REST_CLIENT_SUBSCRIPTION_CLIENT_URL=${NOTIFICATION_ENDPOINT}
-            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=${NOTIFICATION_ENDPOINT}
-            - QUARKUS_REST_CLIENT_ACTION_REQUEST_CLIENT_URL=${NOTIFICATION_ENDPOINT}
+            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=${http://localhost:9999}
             - QUARKUS_LOG_MIN_LEVEL=DEBUG
             - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
 
@@ -62,17 +60,6 @@ services:
                 condition: service_healthy
         extra_hosts:
             - "host.docker.internal:host-gateway"
-
-    notification-handler:
-        build:
-            context: ./notification-handler
-            dockerfile: Dockerfile
-        ports:
-            - "5000:5000"
-        env_file: .env
-        volumes:
-            - "./notifications:/app/notifications"  # Map the host notifications folder to the container's /app/notifications directory
-            - "./events:/app/events"  # Map the host events folder to the container's /app/events directory
 
     graph-db:
         image: ontotext/graphdb:10.4.3
@@ -98,3 +85,12 @@ services:
         volumes:
             - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
             - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl"
+    
+    caddy:
+        image: caddy:latest
+        ports:
+          - "9999:9999"  # Expose Caddy on port 9999
+        env_file:
+          - .env  # Load environment variables from .env file
+        volumes:
+          - ./Caddyfile:/etc/caddy/Caddyfile  # Mount the Caddyfile
