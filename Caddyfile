@@ -6,10 +6,10 @@ log {
 }
 
 # Rewrite all requests to the specified Make webhook path
-rewrite * {env.MAKE_WEBHOOK_PATH}
+rewrite * /{MAKE_WEBHOOK_PATH}
 
 # Reverse proxy to the Make.com webhook
-reverse_proxy {env.MAKE_WEBHOOK_HOST} {
+reverse_proxy {MAKE_WEBHOOK_HOST} {
     method POST    
     header_up Host {upstream_hostport}
 }
