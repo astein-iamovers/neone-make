@@ -10,7 +10,6 @@ rewrite * {env.MAKE_WEBHOOK_PATH}
 
 # Reverse proxy to the Make.com webhook
 reverse_proxy {env.MAKE_WEBHOOK_HOST} {
-    header_up Host {env.MAKE_WEBHOOK_HOST}
-    header_up X-Forwarded-For {remote}
-    method POST
+    method POST    
+    header_up Host {upstream_hostport}
 }
