@@ -1,16 +1,15 @@
 # NEONE Server Setup
 
-Welcome to the NEONE Server Setup, in this document you will find all the instructions to run a NE:ONE server and how to setup pub/sub in ONE Record
+Welcome to the NEONE Server Setup, in this document you will find the instructions to run a NE:ONE server
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed
-- [Docker Compose](https://docs.docker.com/compose/install/) installed (make sure you have compose V2)
 - [Git](https://git-scm.com/downloads) installed
 
 ## Step by step guide
 
-1) Clone the repository
+1) Clone this repository
    ```bash
    git clone https://github.com/astein-iamovers/neone.git
    ```
