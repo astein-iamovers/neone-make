@@ -1,14 +1,15 @@
-:9999  # Listen on port 9999
+:9999  # Caddy listens on port 9999
 
 log {   # Enable logging for debugging
     output stdout
     level DEBUG
 }
 
-# Rewrite all requests to the Make webhook path
+# Rewrite all requests to the specified path
 rewrite * /1bqvyj6kfq25sec6rahbjhxbazlohu76
 
-# Forward all requests to Make's webhook
+# Reverse proxy to the external Make.com webhook URL
 reverse_proxy https://hook.eu2.make.com {
-    header_up X-Forwarded-For {remote_host}
+    header_up Host {upstream_hostport}
+    method POST
 }
