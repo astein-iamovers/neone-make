@@ -1,6 +1,6 @@
 # NEONE Server Setup
 
-Welcome to the NEONE Server Setup, in this document you will find the instructions to run a NE:ONE server
+Welcome to the NEONE Server Setup, in this document you will find the instructions to run a NE:ONE server.
 
 ## Prerequisites
 
@@ -25,7 +25,14 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
    ```bash
    nano .env
    ```
-   Paste your variables: baseUrl, client_id, client_secret, audience, notification-endpoint
+   Paste your variables
+   - HOST: the URL of your ONE Record Server
+   - CLIENT_ID: given by IAM
+   - CLIENT_SECRET: given by IAM
+   - AUDIENCE: given by IAM
+   - NOTIFICATION_ENDPOINT:
+   Optional if:
+   - 
    To save an exit: ctrl+x then Y then Enter
 6) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
