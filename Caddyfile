@@ -5,7 +5,7 @@ log {
     level DEBUG
 }
 
-# Rewrite all requests to the specified webhook path
+# Rewrite all requests to the specified Make webhook path
 rewrite * {env.MAKE_WEBHOOK_PATH}
 
 # Reverse proxy to the Make.com webhook
