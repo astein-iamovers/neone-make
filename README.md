@@ -1,4 +1,4 @@
-# NEONE Server Setup
+# NEONE Server Setup - Forward Events to a Make Webhook
 
 Welcome to the NEONE Server Setup, in this document you will find the instructions to run a NE:ONE server.
 
@@ -11,7 +11,7 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
 
 1) Clone this repository
    ```bash
-   git clone https://github.com/astein-iamovers/neone.git
+   git clone https://github.com/astein-iamovers/neone-make.git
    ```
 2) Switch to the directory neone
    ```bash
