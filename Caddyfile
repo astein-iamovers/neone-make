@@ -1,0 +1,14 @@
+:9999  # Listen on port 9999
+
+log {   # Enable logging for debugging
+    output stdout
+    level DEBUG
+}
+
+# Rewrite all requests to the Make webhook path
+rewrite * /1bqvyj6kfq25sec6rahbjhxbazlohu76
+
+# Forward all requests to Make's webhook
+reverse_proxy https://hook.eu2.make.com {
+    header_up X-Forwarded-For {remote_host}
+}
