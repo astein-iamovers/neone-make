@@ -15,7 +15,7 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
    ```
 2) Switch to the directory neone
    ```bash
-   cd neone
+   cd neone-make
    ```
    If you have Mac or Linux, please reset folder permissions 
    ```bash
