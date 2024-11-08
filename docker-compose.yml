@@ -85,7 +85,7 @@ services:
         volumes:
             - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
             - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl"
-    
+
     caddy:
         image: caddy:latest
         ports:
