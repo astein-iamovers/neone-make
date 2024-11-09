@@ -97,4 +97,5 @@ services:
         volumes:
           - ./Caddyfile.template:/etc/caddy/Caddyfile.template
           - ./start_caddy.sh:/start_caddy.sh
+          - ./.env:/app/.env
         entrypoint: ["/bin/sh", "/start_caddy.sh"]
