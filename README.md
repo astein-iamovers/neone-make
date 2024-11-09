@@ -31,7 +31,7 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
    - CLIENT_SECRET: given by IAM
    - AUDIENCE: given by IAM
 
-5) Add your Make webhook details to the Caddyfile
+5) Modify the Caddyfile adding your Make webhook details
    ```bash
    nano Caddyfile
    ```
