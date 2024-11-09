@@ -30,14 +30,20 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
    - CLIENT_ID: given by IAM
    - CLIENT_SECRET: given by IAM
    - AUDIENCE: given by IAM
-   - MAKE_WEBHOOK_URL
-    
+
+5) Add your Make webhook details to the Caddyfile
+   ```bash
+   nano Caddyfile
+   ```
+   Replace the placeholders MAKE_HOST and MAKE_PATH with your webhook details.
+   Note that the URL needs to be split. If your webhook is https://hook.us2.make.com/zbugts03uc1i2ouvsx1ksnwzv07cql1x, then the MAKE_HOST is https://hook.us2.make.com and the MAKE_PATH is /zbugts03uc1i2ouvsx1ksnwzv07cql1x (include the initial hash)
+   
    To save an exit: ctrl+x then Y then Enter
-6) Start all services with [docker compose](https://docs.docker.com/compose/)
+7) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
    docker compose up -d
    ```
-7) Wait until all containers are up and running:
+8) Wait until all containers are up and running:
    ```bash
    [+] Running 6/6
     ✔ Network docker-compose_default            Created
@@ -50,7 +56,7 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
         
     
    ```
-8) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
+9) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
    You should see a HTTP Error 401, because you did not authenticate yet. But this confirms that the ONE Record Server is up and running.
 
 # Overview of services
