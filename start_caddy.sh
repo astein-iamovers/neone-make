@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load environment variables
-source .env
+source /app/.env
 
 # Separate base URL and path
 MAKE_WEBHOOK_HOST=$(echo "$MAKE_WEBHOOK_URL" | sed -E 's|^((https?://[^/]+)).*|\1|')
