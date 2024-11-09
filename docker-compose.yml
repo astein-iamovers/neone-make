@@ -91,8 +91,10 @@ services:
     caddy:
         image: caddy:latest
         ports:
-          - "9999:9999"  # Expose Caddy on port 9999
+          - "9999:9999"
         env_file:
-          - .env  # Load environment variables from .env file
+          - .env
         volumes:
-          - ./Caddyfile:/etc/caddy/Caddyfile  # Mount the Caddyfile
+          - ./Caddyfile.template:/etc/caddy/Caddyfile.template
+          - ./start_caddy.sh:/start_caddy.sh
+        entrypoint: ["/bin/sh", "/start_caddy.sh"]
