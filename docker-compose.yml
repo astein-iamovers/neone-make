@@ -92,8 +92,6 @@ services:
         image: caddy:latest
         ports:
           - "9999:9999"
-        env_file:
-          - .env
         volumes:
           - ./Caddyfile.template:/etc/caddy/Caddyfile.template
           - ./start_caddy.sh:/start_caddy.sh
