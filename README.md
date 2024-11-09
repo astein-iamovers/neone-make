@@ -39,11 +39,11 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
    Note that the URL needs to be split. If your webhook is https://hook.us2.make.com/zbugts03uc1i2ouvsx1ksnwzv07cql1x, then the MAKE_HOST is https://hook.us2.make.com and the MAKE_PATH is /zbugts03uc1i2ouvsx1ksnwzv07cql1x (include the initial hash)
    
    To save an exit: ctrl+x then Y then Enter
-7) Start all services with [docker compose](https://docs.docker.com/compose/)
+6) Start all services with [docker compose](https://docs.docker.com/compose/)
    ```bash
    docker compose up -d
    ```
-8) Wait until all containers are up and running:
+7) Wait until all containers are up and running:
    ```bash
    [+] Running 6/6
     ✔ Network docker-compose_default            Created
@@ -56,7 +56,7 @@ Welcome to the NEONE Server Setup, in this document you will find the instructio
         
     
    ```
-9) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
+8) Try to access the ONE Record Server by http://{baseUrl}:8080 using your favorite browser (replace baseUrl with your ONE Record URL). 
    You should see a HTTP Error 401, because you did not authenticate yet. But this confirms that the ONE Record Server is up and running.
 
 # Overview of services
