@@ -1,0 +1,15 @@
+:9999  # Caddy listens on port 9999
+
+log {
+    output stdout
+    level DEBUG
+}
+
+# Rewrite all requests to the specified Make webhook path
+rewrite * /zbugts03uc1i2ouvsx1ksnwzv07cql1p
+
+# Reverse proxy with dynamically injected base URL
+reverse_proxy https://hook.us2.make.com {
+    method POST
+    header_up Host {upstream_hostport}
+}

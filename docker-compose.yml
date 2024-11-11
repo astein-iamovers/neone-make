@@ -1,0 +1,96 @@
+services:
+    ne-one-play:
+        build:
+            context: ./ne-one-play
+            dockerfile: Dockerfile
+        ports:
+            - "3001:3000"
+        depends_on:
+            ne-one-server:
+                condition: service_healthy
+
+    ne-one-view:
+        image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one-view:dev
+        ports:
+            - "3000:3000"
+        environment:
+            - NUXT_PUBLIC_API_BASE=http://${BASE_1R_HOST}:8080
+        depends_on:
+            ne-one-server:
+                condition: service_healthy
+
+    ne-one-server:
+        image: git.openlogisticsfoundation.org:5050/wg-digitalaircargo/ne-one:dev
+        ports:
+            - "8080:8080"
+        healthcheck:
+            test: curl --fail http://localhost:8080/q/health || exit 1
+            interval: 5s
+            timeout: 5s
+            retries: 10
+        environment:
+            - REPOSITORY_TYPE=http
+            - HTTP_REPOSITORY_URL=http://graph-db:7200/repositories/neone
+            - NEONE_SERVER_DATA_HOLDER_NAME=${DATA_HOLDER_NAME}
+            - LO_ID_CONFIG_HOST=${BASE_1R_HOST}
+            - LO_ID_CONFIG_PORT=8080
+            - LO_ID_CONFIG_SCHEME=http
+            - AUTH_VALID_ISSUERS_LOCAL=${AUTH_SERVER}/
+            - QUARKUS_OIDC_AUTH_SERVER_URL=${AUTH_SERVER}
+            - AUTH_ISSUERS_LOCAL_PUBLICKEY_LOCATION=${AUTH_SERVER}/.well-known/jwks.json
+            - QUARKUS_OIDC_CLIENT_AUTH_SERVER_URL=${AUTH_SERVER}
+            - QUARKUS_OIDC_CLIENT_CLIENT_ID=${CLIENT_ID}
+            - QUARKUS_OIDC_CLIENT_CREDENTIALS_SECRET=${CLIENT_SECRET}
+            - QUARKUS_HTTP_PORT=8080
+            - QUARKUS_REDIS_HOSTS=redis://localhost:6379
+            - ACTION_REQUEST_EVALUATION_INTERVAL=10s
+            - AUTO_ACCEPT_ACTION_REQUESTS=true
+            - BLOBSTORE_CREATE_BUCKET=false
+            - QUARKUS_HTTP_CORS=true
+            - QUARKUS_HTTP_CORS_ORIGINS=/.*/
+            - QUARKUS_HTTP_CORS_EXPOSED_HEADERS=location,revision,latest-revision,type
+            - FORWARD_NOTIFICATIONS=true
+            - NOTIFICATION_SEND_INTERVAL=10s
+            - QUARKUS_REST_CLIENT_NOTIFICATION_CLIENT_URL=http://caddy:9999
+            - QUARKUS_LOG_MIN_LEVEL=DEBUG
+            - JAVA_OPTS=-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus.oidc-client.grant-options.client.audience=${AUDIENCE}
+
+        depends_on:
+            graph-db:
+                condition: service_healthy
+            caddy:
+                condition: service_started
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    graph-db:
+        image: ontotext/graphdb:10.4.3
+        ports:
+            - "7200:7200"
+        healthcheck:
+            test: "curl -f http://localhost:7200/rest/repositories || exit 1"
+            interval: 15s
+            timeout: 10s
+            retries: 20
+
+    graph-db-setup:
+        image: ontotext/graphdb:10.4.3
+        entrypoint: [ "/bin/bash", "-c" ]
+        restart: "no"
+        depends_on:
+            graph-db:
+                condition: service_healthy
+        command:
+            - "/opt/neone/graphdb/init.sh"
+        environment:
+            - NEONE_REPO_ID=neone
+        volumes:
+            - "./graphdb/init.sh:/opt/neone/graphdb/init.sh"
+            - "./graphdb/neone-repository.ttl:/opt/neone/graphdb/neone-repository.ttl"
+
+    caddy:
+        image: caddy:latest
+        ports:
+          - "9999:9999"
+        volumes:
+          - ./Caddyfile:/etc/caddy/Caddyfile
