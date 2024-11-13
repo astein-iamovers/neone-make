@@ -8,7 +8,7 @@ Go to the main [neone repository](https://github.com/astein-iamovers/neone) if y
 
 ONE Record requires each server to implement a notifications endpoint to receive notifications from other ONE Record servers. The NEONE server already includes this. However, processing the notification and updating your systems is outside the ONE Record scope, as each company needs the flexibility to implement its own rules. The NEONE Server stores notifications as objects and allows you to forward them to your own custom NOTIFICATION_ENDPOINT. In the current version, NEONE expects the notification endpoint to end with "/notifications".
 
-Make or Zappier's webhooks do not contain this "/notifications" suffix so a workaround is required, using a proxy service, Caddy, to receive these notifications and forward them to the Make Webhook.
+Make or Zappier's webhooks do not contain this "/notifications" suffix so a workaround is required. The following setup uses a proxy service, Caddy, to receive these notifications and forward them to the Make Webhook.
 
 ## Prerequisites
 
