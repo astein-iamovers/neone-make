@@ -4,9 +4,13 @@ The neone-make repository is an alternative configuration allowing you to forwar
 
 Go to the main [neone repository](https://github.com/astein-iamovers/neone) if you have your own NOTIFICATION_ENDPOINT (ensure it has the "/notification" suffix).
 
+The [neone-flask repository](https://github.com/astein-iamovers/neone-flask) provides an alternative configuration using a customizable Flask application to receive and process notifications directly. This option is ideal for companies that prefer to manage notifications within their own infrastructure, offering full control and flexibility over notification handling.
+
 ## Notifications
 
-ONE Record requires each server to implement a notifications endpoint to receive notifications from other ONE Record servers. The NEONE server already includes this. However, processing the notification and updating your systems is outside the ONE Record scope, as each company needs the flexibility to implement its own rules. The NEONE Server stores notifications as objects and allows you to forward them to your own custom NOTIFICATION_ENDPOINT. In the current version, NEONE expects the notification endpoint to end with "/notifications".
+ONE Record requires each server to implement a notifications endpoint to receive notifications from other ONE Record servers. While the NEONE server includes a notifications endpoint, processing and integrating notifications into your systems is beyond the scope of ONE Record. This flexibility allows companies to define their own rules and workflows for handling notifications.
+
+The NEONE Server stores notifications as objects and allows you to forward them to your own custom NOTIFICATION_ENDPOINT. In the current version, NEONE expects the notification endpoint to end with /notifications.
 
 Make or Zappier's webhooks do not contain this "/notifications" suffix so a workaround is required. The following setup uses a proxy service, Caddy, to receive these notifications and forward them to the Make Webhook.
 
@@ -59,7 +63,7 @@ Make or Zappier's webhooks do not contain this "/notifications" suffix so a work
     ✔ Network docker-compose_default            Created
     ✔ Container docker-compose-graph-db-1       Healthy
     ✔ Container docker-compose-graph-db-setup-1 Started
-    ✔ Container docker-compose-ne-one-server-1  Healty
+    ✔ Container docker-compose-ne-one-server-1  Healthy
     ✔ Container neone-ne-one-play-1             Started
     ✔ Container neone-ne-one-view-1             Started
     ✔ Container caddy-1                         Started
