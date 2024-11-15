@@ -27,7 +27,7 @@ Make or Zappier's webhooks do not contain this "/notifications" suffix so a work
    ```bash
    cd neone-make
    ```
-   If you have Mac or Linux, please reset folder permissions 
+3) If you have Mac or Linux, please reset folder permissions to allow cross-container dependencies.
    ```bash
    chmod -R 755 ./
    ```
